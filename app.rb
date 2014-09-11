@@ -33,6 +33,10 @@ get '/' do
   erb :index
 end
 
+get '/meetups' do
+  erb :'/meetups/index'
+end
+
 get '/auth/github/callback' do
   auth = env['omniauth.auth']
 
