@@ -34,6 +34,9 @@ get '/' do
 end
 
 get '/meetups' do
+  @meetups = Meetup.all
+  @particpants = Participant.all
+
   erb :'/meetups/index'
 end
 
@@ -42,13 +45,27 @@ get '/meetups/submit' do
 end
 
 post '/meetups/submit' do
-  if meetup.create(name: params["id"], location: params["location"], description: params["description"]).valid?
-    meetup.create(name: params["id"], location: params["location"], description: params["description"])
+  if !current_user.present?
+
+    erb :'/meetups/submit'
   end
-  erb :'/meetups/show'
+
+  if Meetup.create(name: params["name"], location: params["location"], description: params["description"]).valid?
+    new_meetup = Meetup.create(name: params["name"], location: params["location"], description: params["description"])
+    Participant.create(meetup_id: new_meetup.id, user_id: current_user.id)
+
+    @meetup = Meetup.where(name: params["name"], location: params["location"], description: params["description"])
+    @new    = "Meetup Successfully Created!"
+
+    erb :'/meetups/show'
+  end
+
 end
 
 get '/meetups/:id' do
+
+  @meetup  = Meetup.find_by(id: params["id"])
+  @new     = ''
 
   erb :'/meetups/show'
 end
