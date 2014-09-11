@@ -37,6 +37,22 @@ get '/meetups' do
   erb :'/meetups/index'
 end
 
+get '/meetups/submit' do
+  erb :'/meetups/submit'
+end
+
+post '/meetups/submit' do
+  if meetup.create(name: params["id"], location: params["location"], description: params["description"]).valid?
+    meetup.create(name: params["id"], location: params["location"], description: params["description"])
+  end
+  erb :'/meetups/show'
+end
+
+get '/meetups/:id' do
+
+  erb :'/meetups/show'
+end
+
 get '/auth/github/callback' do
   auth = env['omniauth.auth']
 
