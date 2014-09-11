@@ -7,3 +7,14 @@
   <li>Location: <%= @meetup.location %></li>
   <li>Description: <%= @meetup.description %></li>
 </ul>
+
+Participants:
+<ul>
+  <% @participants.each do |participant| %>
+  <li><%= participant.user.username %>    <img src="<%=participant.user.avatar_url%>" style="width:48px;height:48px"></li>
+  <% end %>
+</ul>
+
+<form action="/meetups/<%= @meetup.id %>" method="post">
+  <input type="submit" value="Join!">
+</form>

@@ -2,6 +2,6 @@
 
 <ul>
   <% @meetups.each do |meetup| %>
-    <li><%= meetup.name %> ID: <%= meetup.id %> Location: <%= meetup.location %><%= meetup.description %></li>
+    <li><a href="/meetups/<%= meetup.id %>"><%= meetup.name %></a></li>
     <% end %>
-
+</ul>

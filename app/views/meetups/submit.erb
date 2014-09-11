@@ -1,14 +1,16 @@
 <h1><%= @title %></h1>
 
+<p><%= @not_signed_in %></p>
+
 <form action ="/meetups/submit" method="post">
     <label for="meetup_name">Name</label>
-      <input type="text" id="name" name="name"/><br>
+      <input type="text" id="name" name="meetup[name]"/><br>
 
     <label for="location">Location</label>
-      <input type="text" id="location" name="location"/><br>
+      <input type="text" id="location" name="meetup[location]"/><br>
 
     <label for="description">Description</label>
-      <textarea id="description" name="description"/></textarea><br>
+      <textarea id="description" name="meetup[description]"/></textarea><br>
 
       <input type="submit" />
   </form>

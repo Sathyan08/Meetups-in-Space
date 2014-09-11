@@ -2,6 +2,7 @@ require 'sinatra'
 require 'sinatra/activerecord'
 require 'sinatra/flash'
 require 'omniauth-github'
+# require 'pry'
 
 require_relative 'config/application'
 
@@ -35,37 +36,60 @@ end
 
 get '/meetups' do
   @meetups = Meetup.all
-  @particpants = Participant.all
+  # @particpants = Participant.all
 
   erb :'/meetups/index'
 end
 
 get '/meetups/submit' do
+  @not_signed_in = ''
+
   erb :'/meetups/submit'
 end
 
 post '/meetups/submit' do
   if !current_user.present?
+    @not_signed_in = "You are not signed in!  Sign in to add a meetup."
 
     erb :'/meetups/submit'
   end
 
-  if Meetup.create(name: params["name"], location: params["location"], description: params["description"]).valid?
-    new_meetup = Meetup.create(name: params["name"], location: params["location"], description: params["description"])
-    Participant.create(meetup_id: new_meetup.id, user_id: current_user.id)
+  # binding.pry
+  new_meetup = Meetup.new(params[:meetup])
+  # new_meetup = Meetup.new(name: params["name"], location: params["location"], description: params["description"])
 
-    @meetup = Meetup.where(name: params["name"], location: params["location"], description: params["description"])
+  if new_meetup.save
+    # new_meetup = Meetup.create(name: params["name"], location: params["location"], description: params["description"])
+    # new_participant = Participant.create(meetup_id: new_meetup.id, user_id: current_user.id)
+    # participant = new_meetup.partipants.create(user: current_user)
+    new_meetup.users << current_user
+    # binding.pry
+
+    @meetup = Meetup.find_by(id: new_meetup.id)
     @new    = "Meetup Successfully Created!"
+
+    # binding.pry
 
     erb :'/meetups/show'
   end
 
 end
 
+post '/meetups/:id' do
+  @meetup = Meetup.find_by(id: params["id"])
+  @new    = "Meetup successfully joined!"
+  @meetup.users << current_user
+
+  @participants = @meetup.participants
+
+  erb :'/meetups/show'
+end
+
 get '/meetups/:id' do
 
   @meetup  = Meetup.find_by(id: params["id"])
   @new     = ''
+  @participants = @meetup.participants
 
   erb :'/meetups/show'
 end
