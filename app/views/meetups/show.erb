@@ -28,15 +28,19 @@ Comments:
 <ul>
   <% if @comments.length > 0 %>
   <% @comments.each do |comment| %>
-    <li>Subject: <%= comment.subject %> Body: <%= comment.body %></li>
+    <li>Posted By:<%= comment.user.username %> Subject: <%= comment.subject %> Body: <%= comment.body %></li>
   <% end %>
   <% end %>
 </ul>
 
-Comment:
+Make a Comment:
 <form action ="/meetups/comment/<%= @meetup.id %>" method="post">
     <label for="subject">Subject</label>
       <input type="text" id="subject" name="comment[subject]"/><br>
+
+      <input type="hidden" id="meetup_id" name="comment[meetup_id]" value="<%= @meetup.id %>"/>
+
+      <input type="hidden" id="user_id" name="comment[user_id]" value="<%= @user_id %>"/>
 
     <label for="description">Body:</label>
       <textarea id="body" name="comment[body]"/></textarea><br>

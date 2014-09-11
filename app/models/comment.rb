@@ -2,6 +2,7 @@ class Comment < ActiveRecord::Base
  belongs_to :user
  belongs_to :meetup
 
- has_many   :commentslists
+ validates :user_id, presence: true
+ validates :meetup_id, presence: true
 
 end

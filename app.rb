@@ -68,6 +68,8 @@ post '/meetups/submit' do
     @meetup = Meetup.find_by(id: new_meetup.id)
     @new    = "Meetup Successfully Created!"
     @comments     = @meetup.comments
+    @participants = @meetup.participants
+    @user_id      = current_user.id
 
     # binding.pry
 
@@ -84,6 +86,8 @@ post '/meetups/:id' do
   @participants = @meetup.participants
   @comments     = @meetup.comments
 
+  @user_id      = current_user.id
+
   erb :'/meetups/show'
 end
 
@@ -95,6 +99,8 @@ get '/meetups/:id' do
 
   @comments     = @meetup.comments
 
+  @user_id      = current_user.id
+
   erb :'/meetups/show'
 end
 
@@ -105,6 +111,7 @@ post '/meetups/leave/:id' do
   @new     = 'You have left the meetup successfully'
   @participants = @meetup.participants
   @comments     = @meetup.comments
+  @user_id      = current_user.id
 
   erb :'/meetups/show'
 
@@ -112,18 +119,20 @@ end
 
 post '/meetups/comment/:id' do
   new_comment = Comment.new(params[:comment])
-  @meetup = Meetup.find_by(meetup_id: params["id"])
+  @meetup = Meetup.find_by(id: params["id"])
 
   if new_comment.save
-    new_comment.users << current_user
-    # new_comment.meetups << @meetup
-    new_comment.meetups << Meetup.find_by(meetup_id: params["id"])
+    # new_comment.users << current_user
+    # # new_comment.meetups << @meetup
+    # new_comment.meetups << Meetup.find_by(meetup_id: params["id"])
     @new = "Comment successfully added!"
   else
     @new = "Sorry.  An error occurred."
   end
   @participants = @meetup.participants
   @comments     = @meetup.comments
+
+  @user_id      = current_user.id
 
   erb :'/meetups/show'
 end
