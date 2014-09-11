@@ -15,6 +15,31 @@ Participants:
   <% end %>
 </ul>
 
+
 <form action="/meetups/<%= @meetup.id %>" method="post">
   <input type="submit" value="Join!">
 </form>
+
+<form action="/meetups/leave/<%= @meetup.id %>" method="post">
+  <input type="submit" value="Leave!">
+</form>
+
+Comments:
+<ul>
+  <% if @comments.length > 0 %>
+  <% @comments.each do |comment| %>
+    <li>Subject: <%= comment.subject %> Body: <%= comment.body %></li>
+  <% end %>
+  <% end %>
+</ul>
+
+Comment:
+<form action ="/meetups/comment/<%= @meetup.id %>" method="post">
+    <label for="subject">Subject</label>
+      <input type="text" id="subject" name="comment[subject]"/><br>
+
+    <label for="description">Body:</label>
+      <textarea id="body" name="comment[body]"/></textarea><br>
+
+      <input type="submit" />
+  </form>
